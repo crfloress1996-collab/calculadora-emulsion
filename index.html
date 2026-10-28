@@ -88,11 +88,11 @@ details .grid{margin-top:12px}
       <button type="button" id="mArea" aria-pressed="false">Área</button>
     </div>
     <div class="grid" id="boxProg">
-      <label>Prog. inicial (ej. 251+820)
-        <input id="pi" type="text" inputmode="decimal" value="251+820" autocomplete="off">
+      <label>Prog. inicial (escribe 251820)
+        <input id="pi" type="text" inputmode="numeric" value="251+820" autocomplete="off">
       </label>
       <label>Prog. final
-        <input id="pf" type="text" inputmode="decimal" value="253+540" autocomplete="off">
+        <input id="pf" type="text" inputmode="numeric" value="253+540" autocomplete="off">
       </label>
     </div>
     <div class="grid" id="boxLong" hidden>
@@ -211,6 +211,13 @@ details .grid{margin-top:12px}
   }
   const EX={gal:3500,pi:'251+820',pf:'253+540',lon:1720,anc:3.10,are:5332,jal:7,agr:''};
   function load(o){for(const k in o) $(k).value=o[k]; $('exTag').hidden=false; calc()}
+  function fmtProg(el){
+    const v=el.value;
+    if(v.includes('.')||v.includes(',')) return;
+    const d=v.replace(/\D/g,'');
+    el.value = d.length>=4 ? d.slice(0,-3)+'+'+d.slice(-3) : d;
+  }
+  ['pi','pf'].forEach(id=>$(id).addEventListener('input',()=>fmtProg($(id))));
   ids.forEach(id=>$(id).addEventListener('input',()=>{if(!id.startsWith('p')||id==='pi'||id==='pf') $('exTag').hidden=true; calc()}));
   $('mProg').onclick=()=>setMode('prog'); $('mLong').onclick=()=>setMode('long'); $('mArea').onclick=()=>setMode('area');
   $('clear').onclick=()=>{['gal','pi','pf','lon','are','jal','agr'].forEach(id=>$(id).value='');$('exTag').hidden=true;calc();$('gal').focus()};
